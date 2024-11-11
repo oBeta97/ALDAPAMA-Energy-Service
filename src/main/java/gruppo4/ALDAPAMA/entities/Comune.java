@@ -16,7 +16,7 @@ public class Comune {
     private long id;
     private String nome;
     @ManyToOne
-    @JoinColumn(name = "id_provincia", referencedColumnName = "is")
+    @JoinColumn(name = "id_provincia")
     private Provincia provincia;
 
     public Comune(String nome, Provincia provincia) {
