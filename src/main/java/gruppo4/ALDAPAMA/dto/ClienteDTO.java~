@@ -15,10 +15,10 @@ public record ClienteDTO(
         @NotNull(message = "La data di inserimento è obbligatoria")
         Date dataInserimento,
         Date dataUltimoContatto,
-        @Email(message = "La mail non e nel formato corretto")
+        @Email(message = "La mail ")
         String pec,
         String telefono,
-        @URL(message = "Errore nell'URL dell'immagine")
+        @URL
         String logoAziendale
 ) {
 }

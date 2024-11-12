@@ -46,7 +46,7 @@ public class ClienteService {
 
     public Cliente update(Long id, ClienteDTO clienteDTO) {
         Cliente esistente = getById(id);
-        Cliente clienteAggiornato = new Cliente(id, clienteDTO.ragioneSociale(), 
+        Cliente clienteAggiornato = new Cliente(esistente.getId(), clienteDTO.ragioneSociale(), 
             clienteDTO.pec(), clienteDTO.telefono(), clienteDTO.dataUltimoContatto(), 
             clienteDTO.logoAziendale(), esistente.getDataInserimento());
         return clienteRepository.save(clienteAggiornato);
