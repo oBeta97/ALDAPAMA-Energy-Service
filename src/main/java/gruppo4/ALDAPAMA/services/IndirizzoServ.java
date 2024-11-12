@@ -6,6 +6,7 @@ import gruppo4.ALDAPAMA.entities.Comune;
 import gruppo4.ALDAPAMA.entities.Indizzo;
 import gruppo4.ALDAPAMA.enums.TipoSede;
 import gruppo4.ALDAPAMA.exceptions.BadRequestException;
+import gruppo4.ALDAPAMA.exceptions.NotFoundException;
 import gruppo4.ALDAPAMA.repositories.IndirizzoRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,6 +43,11 @@ public class IndirizzoServ {
         if (size > 30) size = 30;
         Pageable pageable = PageRequest.of(page, size);
         return indirizzoRepo.findAll(pageable);
+    }
+
+    public Indizzo findIndirizzoById(long id_indirizzo){
+        return this.indirizzoRepo.findById(id_indirizzo).orElseThrow(() ->
+                new NotFoundException("Indirizzo con questo id non trovato"));
     }
 
 

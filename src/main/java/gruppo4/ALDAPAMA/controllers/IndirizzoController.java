@@ -38,8 +38,12 @@ public class IndirizzoController {
 
     @GetMapping
     public Page<Indizzo> findAllIndirizzi(@RequestParam(defaultValue = "0") int page,
-                                          @RequestParam(defaultValue = "30") int size) {
+                                      @RequestParam(defaultValue = "30") int size) {
         return this.indirizzoServ.findAllIndirizzi(page, size);
     }
 
+    @GetMapping("/{id_indirizzo}")
+    public Indizzo findComuneById(@PathVariable long id_indirizzo) {
+        return this.indirizzoServ.findIndirizzoById(id_indirizzo);
+    }
 }
