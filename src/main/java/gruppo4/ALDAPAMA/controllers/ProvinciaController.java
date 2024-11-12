@@ -24,7 +24,7 @@ public class ProvinciaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Provincia saveProvincia(@RequestBody ProvinciaDTO body,
+    public Provincia saveProvincia(@RequestBody @Validated ProvinciaDTO body,
                                    BindingResult validationResult) {
         if (validationResult.hasErrors()) {
             String msg = validationResult.getAllErrors().stream()
