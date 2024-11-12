@@ -1,8 +1,5 @@
 package gruppo4.ALDAPAMA.controllers;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import gruppo4.ALDAPAMA.dto.ClienteDTO;
 import gruppo4.ALDAPAMA.entities.Cliente;
 import gruppo4.ALDAPAMA.services.ClienteService;
@@ -12,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Cliente", description = "Cliente management APIs")
 @RestController
 @RequestMapping("/clienti")
 public class ClienteController {
@@ -20,12 +16,6 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
-    @Operation(
-        summary = "Retrieve all clients",
-        description = "Get a paginated list of all clients with sorting capabilities",
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Successful retrieval of clients")
-        })
     @GetMapping
     public Page<Cliente> getAllClienti(
             @RequestParam(defaultValue = "0") int page,
