@@ -23,4 +23,12 @@ public class Contatto {
     @ManyToOne
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
+
+    public Contatto(String email, String nome, String cognome, String telefono, Cliente cliente) {
+        this.email = email;
+        this.nome = nome;
+        this.cognome = cognome;
+        this.telefono = telefono;
+        this.cliente = cliente;
+    }
 }
