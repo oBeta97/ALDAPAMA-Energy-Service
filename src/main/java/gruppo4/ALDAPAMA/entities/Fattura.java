@@ -1,6 +1,7 @@
 package gruppo4.ALDAPAMA.entities;
 
 
+import gruppo4.ALDAPAMA.dto.FatturaDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,4 +36,23 @@ public class Fattura {
     @ManyToOne
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
+
+
+    public Fattura (FatturaDTO dto, Utente utenteFattura, Cliente clienteFattura, StatoFattura statoFattura){
+        this.data = dto.data();
+        this.importo = dto.importo();
+        this.numFatt = dto.numFatt();
+        this.stato = statoFattura;
+        this.utente = utenteFattura;
+        this.cliente = clienteFattura;
+    }
+
+    public Fattura(Date data, Long importo, String numFatt, StatoFattura stato, Utente utente, Cliente cliente) {
+        this.data = data;
+        this.importo = importo;
+        this.numFatt = numFatt;
+        this.stato = stato;
+        this.utente = utente;
+        this.cliente = cliente;
+    }
 }
