@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface ComuneRepo extends JpaRepository<Comune,Long> {
     Optional<Comune> findByNomeOrProvincia_Id(String nome, long id_provincia);
-    boolean existsByNomeAndProvincia(String nome, Provincia provincia);
+    boolean existsByNomeAndProvincia_id(String nome,  long id_provincia);
 }

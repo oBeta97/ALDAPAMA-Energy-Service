@@ -23,10 +23,9 @@ public class ComuneServ {
     private ComuneRepo comuneRepo;
 
 
-
     public Comune saveComune(ComuneDTO body) {
         Provincia provFound = provinciaServ.findProvinciaById(body.id_provincia());
-        if (comuneRepo.existsByNomeAndProvincia(body.nome(),provFound )){
+        if (comuneRepo.existsByNomeAndProvincia_id(body.nome(), provFound.getId())) {
             throw new BadRequestException("Esiste già un comune con quel nome in quella provincia");
         }
         Comune newComune = new Comune(body.nome(), provFound);
@@ -46,12 +45,13 @@ public class ComuneServ {
 
     public Comune findComuneByIdAndUp(long id_comune, ComuneDTO body) {
         Comune comuneFound = this.findComuneById(id_comune);
-        if (!comuneFound.getNome().equals(body.nome()) || comuneFound.getProvincia().getId() != body.id_provincia()) {
-//            this.checkNomeAndIdProvincia(body);
+        Provincia provFound = this.provinciaServ.findProvinciaById(body.id_provincia());
+        if (comuneRepo.existsByNomeAndProvincia_id(body.nome(), provFound.getId())) {
+            throw new BadRequestException("Esiste già un comune con quel nome in quella provincia");
         }
         comuneFound.setNome(body.nome());
-        comuneFound.setProvincia(this.provinciaServ.findProvinciaById(body.id_provincia()));
-        return this.comuneRepo.save(comuneFound);
+        comuneFound.setProvincia(provFound);
+        return comuneFound;
     }
 
 
