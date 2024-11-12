@@ -1,14 +1,17 @@
 package gruppo4.ALDAPAMA.controllers;
 
 
+import gruppo4.ALDAPAMA.dto.NewUtenteDTO;
 import gruppo4.ALDAPAMA.entities.Utente;
+import gruppo4.ALDAPAMA.exceptions.BadRequestException;
 import gruppo4.ALDAPAMA.services.UtentiService;
+import jdk.jfr.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/utenti")
@@ -24,6 +27,39 @@ public class UtentiController {
             @RequestParam(defaultValue = "id") String sortBy
     ){
         return this.utentiService.getAll(page,size,sortBy);
+    }
+
+    @GetMapping("/{utenteId}")
+    public Utente getUtente (@PathVariable long utenteId){
+        return this.utentiService.getById(utenteId);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Utente saveNewUtente (@RequestBody @Validated NewUtenteDTO newUtenteDTO, BindingResult validationResult){
+        if (validationResult.hasErrors()) {
+            validationResult.getAllErrors().forEach(System.out::println);
+            throw new BadRequestException("Ci sono stati errori nel payload dell'utente!");
+        }
+
+        return this.utentiService.saveNewUtente(newUtenteDTO);
+    }
+
+    @PutMapping("/{utenteId}")
+    public Utente updateUtente(@PathVariable long utenteId, @RequestBody @Validated NewUtenteDTO newUtenteDTO, BindingResult validationResult){
+        if (validationResult.hasErrors()) {
+            validationResult.getAllErrors().forEach(System.out::println);
+            throw new BadRequestException("Ci sono stati errori nel payload dell'utente!");
+        }
+
+        return this.utentiService.updateUser(utenteId, newUtenteDTO);
+    }
+
+
+    @DeleteMapping("/{utenteId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUtente(@PathVariable long utenteId){
+        this.utentiService.deleteUtente(utenteId);
     }
 
 }

@@ -1,5 +1,6 @@
 package gruppo4.ALDAPAMA.entities;
 
+import gruppo4.ALDAPAMA.dto.NewUtenteDTO;
 import gruppo4.ALDAPAMA.enums.Ruolo;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -34,8 +35,24 @@ public class Utente {
         this.password = password;
         this.nome = nome;
         this.cognome = cognome;
-        this.avatar = "https://ui-avatars.com/api/?name=" + getNome() + "+" + getCognome();
+        this.setDefaultAvatar();
         this.ruolo = ruolo;
     }
+
+    public Utente (NewUtenteDTO newUtenteDTO){
+        this.username = newUtenteDTO.username();
+        this.email = newUtenteDTO.email();
+        this.password = newUtenteDTO.password();
+        this.nome = newUtenteDTO.nome();
+        this.cognome = newUtenteDTO.cognome();
+        this.setDefaultAvatar();
+        this.ruolo = Ruolo.USER;
+    }
+
+
+    private void setDefaultAvatar(){
+        this.avatar = "https://ui-avatars.com/api/?name=" + getNome() + "+" + getCognome();
+    }
+
 
 }
