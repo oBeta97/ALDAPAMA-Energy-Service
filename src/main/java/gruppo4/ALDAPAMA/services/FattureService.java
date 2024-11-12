@@ -27,6 +27,9 @@ public class FattureService {
     @Autowired
     private ClienteService clienteService;
 
+    @Autowired
+    private StatiFatturaService statiFatturaService;
+
 
     private void checkFattura (FatturaDTO newFatturaDTO){
         this.fattureRepo.findByNumFatt(newFatturaDTO.numFatt()).
@@ -49,8 +52,7 @@ public class FattureService {
     public Fattura saveNewFattura (FatturaDTO newFatturaDTO){
         Cliente clienteFattura = this.clienteService.getById(newFatturaDTO.idCliente());
         Utente utenteFattura = this.utentiService.getById(newFatturaDTO.idUtente());
-//        TODO - Da aggiungere la parte dello stato
-        StatoFattura statoFattura = new StatoFattura();
+        StatoFattura statoFattura = this.statiFatturaService.getById(newFatturaDTO.idStato());
 
         this.checkFattura(newFatturaDTO);
         Fattura newFattura = new Fattura(newFatturaDTO, utenteFattura, clienteFattura,statoFattura);
@@ -58,20 +60,21 @@ public class FattureService {
         return this.fattureRepo.save(newFattura);
     }
 
-    public Fattura updateUser(long idToUpdate, FatturaDTO newFatturaDTO){
+    public Fattura updateFattura(long idToUpdate, FatturaDTO newFatturaDTO){
+
         Fattura found = this.getById(idToUpdate);
+
         Cliente clienteFattura = this.clienteService.getById(newFatturaDTO.idCliente());
         Utente utenteFattura = this.utentiService.getById(newFatturaDTO.idUtente());
-//        TODO - Da aggiungere la parte dello stato
-        StatoFattura statoFattura = new StatoFattura();
+        StatoFattura statoFattura = this.statiFatturaService.getById(newFatturaDTO.idStato());
 
-        this.checkFattura(newFatturaDTO);
 
         found.setCliente(clienteFattura);
         found.setData(newFatturaDTO.data());
         found.setStato(statoFattura);
         found.setNumFatt(newFatturaDTO.numFatt());
         found.setImporto(newFatturaDTO.importo());
+        found.setUtente(utenteFattura);
 
         return this.fattureRepo.save(found);
     }
