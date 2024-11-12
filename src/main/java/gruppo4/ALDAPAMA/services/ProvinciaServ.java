@@ -39,7 +39,7 @@ public class ProvinciaServ {
 
     public Provincia findProvinciaById(long id_provincia) {
         return this.provinciaRepo.findById(id_provincia).orElseThrow(() ->
-                new NotFoundException("Provoncia con questo id non trovato"));
+                new NotFoundException("Provincia con questo id non trovato"));
     }
 
     public Provincia findProvinciaByIdAndUp(long id_provincia, ProvinciaDTO body) {

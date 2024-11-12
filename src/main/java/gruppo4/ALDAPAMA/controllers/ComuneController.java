@@ -1,9 +1,11 @@
 package gruppo4.ALDAPAMA.controllers;
 
+import gruppo4.ALDAPAMA.dto.ComuneDTO;
 import gruppo4.ALDAPAMA.dto.ProvinciaDTO;
+import gruppo4.ALDAPAMA.entities.Comune;
 import gruppo4.ALDAPAMA.entities.Provincia;
 import gruppo4.ALDAPAMA.exceptions.BadRequestException;
-import gruppo4.ALDAPAMA.services.ProvinciaServ;
+import gruppo4.ALDAPAMA.services.ComuneServ;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -14,54 +16,53 @@ import org.springframework.web.bind.annotation.*;
 import java.util.stream.Collectors;
 
 /*
-    http://localhost:3002/provincia
+    http://localhost:3002/comune
  */
 @RestController
-@RequestMapping("/provincia")
-public class ProvinciaController {
+@RequestMapping("/comune")
+public class ComuneController {
     @Autowired
-    private ProvinciaServ provinciaServ;
+    private ComuneServ comuneServ;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Provincia saveProvincia(@RequestBody @Validated ProvinciaDTO body,
-                                   BindingResult validationResult) {
+    public Comune saveComune(@RequestBody @Validated ComuneDTO body,
+                             BindingResult validationResult) {
         if (validationResult.hasErrors()) {
             String msg = validationResult.getAllErrors().stream()
                     .map(objectError -> objectError.getDefaultMessage())
                     .collect(Collectors.joining(", "));
             throw new BadRequestException("Ci sono errori nel payload! " + msg);
         }
-        return this.provinciaServ.saveProvincia(body);
+        return this.comuneServ.saveComune(body);
     }
 
     @GetMapping
-    public Page<Provincia> findAllProvince(@RequestParam(defaultValue = "0") int page,
-                                           @RequestParam(defaultValue = "10") int size) {
-        return this.provinciaServ.findAllProvince(page, size);
+    public Page<Comune> findAllComuni(@RequestParam(defaultValue = "0") int page,
+                                      @RequestParam(defaultValue = "30") int size) {
+        return this.comuneServ.findAllComuni(page, size);
     }
 
-    @GetMapping("/{id_provincia}")
-    public Provincia findProvinciaById(@PathVariable long id_provincia) {
-        return this.provinciaServ.findProvinciaById(id_provincia);
+    @GetMapping("/{id_comune}")
+    public Comune findComuneById(@PathVariable long id_comune) {
+        return this.comuneServ.findComuneById(id_comune);
     }
 
-    @PutMapping("/{id_provincia}")
-    public Provincia findProvinciaByIdAndUp(@PathVariable long id_provincia,
-                                            @RequestBody @Validated ProvinciaDTO body,
-                                            BindingResult validationResult) {
+    @PutMapping("/{id_comune}")
+    public Comune findComuneByIdAndUp(@PathVariable long id_comune,
+                                      @RequestBody @Validated ComuneDTO body,
+                                      BindingResult validationResult){
         if (validationResult.hasErrors()){
             String msg = validationResult.getAllErrors().stream().map(objectError ->
                     objectError.getDefaultMessage()).collect(Collectors.joining(", "));
             throw new BadRequestException("Ci sono stati errori nel payload! "+ msg);
         }
-        return this.provinciaServ.findProvinciaByIdAndUp(id_provincia,body);
+        return this.comuneServ.findComuneByIdAndUp(id_comune,body);
     }
 
-    @DeleteMapping("/{id_provincia}")
+    @DeleteMapping("/{id_comune}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void findProvinciaByIdAndDel(@PathVariable long id_provincia){
-        this.provinciaServ.findProvinciaByIdAndDel(id_provincia);
+    public void findComuneByIdAndDel(@PathVariable long id_comune){
+        this.comuneServ.findComuneByIdAndDel(id_comune);
     }
-
 }
