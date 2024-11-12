@@ -3,6 +3,7 @@ package gruppo4.ALDAPAMA.controllers;
 import gruppo4.ALDAPAMA.dto.ComuneDTO;
 import gruppo4.ALDAPAMA.dto.ProvinciaDTO;
 import gruppo4.ALDAPAMA.entities.Comune;
+import gruppo4.ALDAPAMA.entities.Provincia;
 import gruppo4.ALDAPAMA.exceptions.BadRequestException;
 import gruppo4.ALDAPAMA.services.ComuneServ;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,5 +58,11 @@ public class ComuneController {
             throw new BadRequestException("Ci sono stati errori nel payload! "+ msg);
         }
         return this.comuneServ.findComuneByIdAndUp(id_comune,body);
+    }
+
+    @DeleteMapping("/{id_comune}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void findComuneByIdAndDel(@PathVariable long id_comune){
+        this.comuneServ.findComuneByIdAndDel(id_comune);
     }
 }

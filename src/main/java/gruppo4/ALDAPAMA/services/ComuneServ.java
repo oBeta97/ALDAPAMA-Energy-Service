@@ -1,7 +1,6 @@
 package gruppo4.ALDAPAMA.services;
 
 import gruppo4.ALDAPAMA.dto.ComuneDTO;
-import gruppo4.ALDAPAMA.dto.ProvinciaDTO;
 import gruppo4.ALDAPAMA.entities.Comune;
 import gruppo4.ALDAPAMA.entities.Provincia;
 import gruppo4.ALDAPAMA.exceptions.BadRequestException;
@@ -13,7 +12,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.swing.plaf.PanelUI;
 
 @Service
 public class ComuneServ {
@@ -52,6 +50,11 @@ public class ComuneServ {
         comuneFound.setNome(body.nome());
         comuneFound.setProvincia(provFound);
         return comuneFound;
+    }
+
+    public void findComuneByIdAndDel(long id_comune) {
+        Comune comuneToDel = this.findComuneById(id_comune);
+        this.comuneRepo.delete(comuneToDel);
     }
 
 
