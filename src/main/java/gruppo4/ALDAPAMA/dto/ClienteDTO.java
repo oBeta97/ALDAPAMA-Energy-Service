@@ -8,7 +8,6 @@ import org.hibernate.validator.constraints.URL;
 import java.util.Date;
 
 public record ClienteDTO(
-        Long id,
         @NotEmpty(message = "La ragione sociale è obbligatoria")
         String ragioneSociale,
         @NotEmpty(message = "La partita IVA è obbligatoria")

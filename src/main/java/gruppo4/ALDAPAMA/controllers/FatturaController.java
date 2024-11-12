@@ -4,7 +4,6 @@ import gruppo4.ALDAPAMA.dto.FatturaDTO;
 import gruppo4.ALDAPAMA.entities.Fattura;
 import gruppo4.ALDAPAMA.exceptions.BadRequestException;
 import gruppo4.ALDAPAMA.services.FattureService;
-import gruppo4.ALDAPAMA.services.UtentiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,7 +19,7 @@ public class FatturaController {
     private FattureService fattureService;
 
     @GetMapping
-    public Page<Fattura> getAllUtenti(
+    public Page<Fattura> getAllFatture(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy
@@ -51,7 +50,7 @@ public class FatturaController {
             throw new BadRequestException("Ci sono stati errori nel payload della fattura!");
         }
 
-        return this.fattureService.updateUser(fatturaId, newFatturaDTO);
+        return this.fattureService.updateFattura(fatturaId, newFatturaDTO);
     }
 
 
