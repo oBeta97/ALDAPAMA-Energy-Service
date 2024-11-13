@@ -12,6 +12,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+   /*
+    http://localhost:3002/clienti
+    */
+
 @Tag(name = "Cliente", description = "Cliente management APIs")
 @RestController
 @RequestMapping("/clienti")
