@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Indizzo {
+public class Indirizzo {
     @Id
     @GeneratedValue
     @Setter(AccessLevel.NONE)
@@ -31,7 +31,7 @@ public class Indizzo {
 
 
 
-    public Indizzo(String CAP, long civico, Cliente cliente, Comune comune, TipoSede tipoSede, String via) {
+    public Indirizzo(String CAP, long civico, Cliente cliente, Comune comune, TipoSede tipoSede, String via) {
         this.CAP = CAP;
         this.civico = civico;
         this.cliente = cliente;

@@ -3,7 +3,7 @@ package gruppo4.ALDAPAMA.services;
 import gruppo4.ALDAPAMA.dto.IndirizzoDTO;
 import gruppo4.ALDAPAMA.entities.Cliente;
 import gruppo4.ALDAPAMA.entities.Comune;
-import gruppo4.ALDAPAMA.entities.Indizzo;
+import gruppo4.ALDAPAMA.entities.Indirizzo;
 import gruppo4.ALDAPAMA.enums.TipoSede;
 import gruppo4.ALDAPAMA.exceptions.BadRequestException;
 import gruppo4.ALDAPAMA.exceptions.NotFoundException;
@@ -23,7 +23,7 @@ public class IndirizzoServ {
     @Autowired
     private ClienteService clienteService;
 
-    public Indizzo saveIndirizzo(IndirizzoDTO body) {
+    public Indirizzo saveIndirizzo(IndirizzoDTO body) {
         Comune comuneFound = this.comuneServ.findComuneById(body.id_comune());
         Cliente clienteFound = this.clienteService.getById(body.id_cliente());
         TipoSede tipoSede = TipoSede.stringToEnum(body.tipoSede());
@@ -34,21 +34,41 @@ public class IndirizzoServ {
                 body.id_comune())) {
             throw new BadRequestException("Esiste già questo indirizzo in questo comune");
         }
-        Indizzo newIndirizzo = new Indizzo(body.cap(), body.civico(),
+        Indirizzo newIndirizzo = new Indirizzo(body.cap(), body.civico(),
                 clienteFound, comuneFound, tipoSede, body.via());
         return this.indirizzoRepo.save(newIndirizzo);
     }
 
-    public Page<Indizzo> findAllIndirizzi(int page, int size) {
+    public Page<Indirizzo> findAllIndirizzi(int page, int size) {
         if (size > 30) size = 30;
         Pageable pageable = PageRequest.of(page, size);
         return indirizzoRepo.findAll(pageable);
     }
 
-    public Indizzo findIndirizzoById(long id_indirizzo){
+    public Indirizzo findIndirizzoById(long id_indirizzo) {
         return this.indirizzoRepo.findById(id_indirizzo).orElseThrow(() ->
                 new NotFoundException("Indirizzo con questo id non trovato"));
     }
 
+    public Indirizzo findIndirizzoByIdAndUp(long id_indirizzo, IndirizzoDTO body) {
+        Indirizzo indirizzoFound = this.findIndirizzoById(id_indirizzo);
+        Comune comuneToUp = this.comuneServ.findComuneById(body.id_comune());
+        Cliente clienteToUp = this.clienteService.getById(body.id_cliente());
+        TipoSede tipoSedeToUp = TipoSede.stringToEnum(body.tipoSede());
+        if (indirizzoRepo.existsByViaAndCivicoAndCAPAndTipoSedeAndComune_Id(body.via(),
+                body.civico(),
+                body.cap(),
+                tipoSedeToUp,
+                body.id_comune())) {
+            throw new BadRequestException("Esiste già questo indirizzo in questo comune");
+        }
+        Indirizzo indirizzoToUp = new Indirizzo(body.cap(), body.civico(), clienteToUp,comuneToUp,tipoSedeToUp, body.via());
+        return this.indirizzoRepo.save(indirizzoToUp);
+    }
+
+    public void findIndizzoByIdAndDel(long id_indirizzo) {
+        Indirizzo indirizzoToDel = this.findIndirizzoById(id_indirizzo);
+        this.indirizzoRepo.delete(indirizzoToDel);
+    }
 
 }
