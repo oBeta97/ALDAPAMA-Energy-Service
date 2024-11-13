@@ -13,6 +13,6 @@ public record ClienteDTO(
         Date dataUltimoContatto,
         @Email(message = "La mail non e nel formato corretto")
         String pec,
-        String telefono
-) {
+        String telefono,
+        String logoAziendale) {
 }
