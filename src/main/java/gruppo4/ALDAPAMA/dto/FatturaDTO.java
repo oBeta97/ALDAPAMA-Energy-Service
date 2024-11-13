@@ -7,10 +7,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public record FatturaDTO(
-        Date data,
+        LocalDate data,
         Long importo,
         String numFatt,
         long idStato,

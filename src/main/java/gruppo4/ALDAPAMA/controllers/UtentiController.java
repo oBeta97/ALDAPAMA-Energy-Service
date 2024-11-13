@@ -13,6 +13,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+/*
+http://localhost:3002/utenti
+ */
+
 @RestController
 @RequestMapping("/utenti")
 public class UtentiController {

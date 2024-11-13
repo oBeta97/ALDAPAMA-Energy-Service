@@ -5,6 +5,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import gruppo4.ALDAPAMA.dto.NewUtenteDTO;
 import gruppo4.ALDAPAMA.entities.Utente;
+import gruppo4.ALDAPAMA.enums.Ruolo;
 import gruppo4.ALDAPAMA.exceptions.BadRequestException;
 import gruppo4.ALDAPAMA.exceptions.NotFoundException;
 import gruppo4.ALDAPAMA.repositories.UtentiRepository;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+
+import java.util.Optional;
 
 @Service
 public class UtentiService {
@@ -61,10 +64,25 @@ public class UtentiService {
     public Utente updateUser(long idToUpdate, NewUtenteDTO newUtenteDTO) {
         Utente found = this.getById(idToUpdate);
 
+        if (!found.getUsername().equals(newUtenteDTO.username())) {
+            Optional<Utente> searchUtenteByUsername = utentiRepo.findByUsername(newUtenteDTO.username());
+            if (searchUtenteByUsername.isPresent() && searchUtenteByUsername.get().getId() != idToUpdate){
+                throw new BadRequestException("L'username fornito è già in uso da un altro utente.");
+            }
+        }
+
+        if (!found.getEmail().equals(newUtenteDTO.email())) {
+            Optional<Utente> searchUtenteByEmail = utentiRepo.findByEmail(newUtenteDTO.email());
+            if (searchUtenteByEmail.isPresent() && searchUtenteByEmail.get().getId() != idToUpdate){
+                throw new BadRequestException("L'email fornito è già in uso da un altro utente.");
+            }
+        }
+
         found.setEmail(newUtenteDTO.email());
         found.setNome(newUtenteDTO.nome());
         found.setCognome(newUtenteDTO.cognome());
         found.setUsername(newUtenteDTO.username());
+        found.setRuolo(Ruolo.stringToEnum(newUtenteDTO.ruolo()));
 
         return this.utentiRepo.save(found);
     }
