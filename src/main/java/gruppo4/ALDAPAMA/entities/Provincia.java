@@ -1,16 +1,14 @@
 package gruppo4.ALDAPAMA.entities;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "province")
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Provincia {
     @Setter(AccessLevel.NONE)
     @Id

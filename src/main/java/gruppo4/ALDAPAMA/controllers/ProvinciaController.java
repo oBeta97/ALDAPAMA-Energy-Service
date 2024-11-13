@@ -1,16 +1,26 @@
 package gruppo4.ALDAPAMA.controllers;
 
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvException;
 import gruppo4.ALDAPAMA.dto.ProvinciaDTO;
 import gruppo4.ALDAPAMA.entities.Provincia;
 import gruppo4.ALDAPAMA.exceptions.BadRequestException;
 import gruppo4.ALDAPAMA.services.ProvinciaServ;
+import gruppo4.ALDAPAMA.tools.CSV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /*
@@ -34,6 +44,21 @@ public class ProvinciaController {
         }
         return this.provinciaServ.saveProvincia(body);
     }
+
+    @PostMapping("/csv")
+    @ResponseStatus(HttpStatus.CREATED)
+    public List<Provincia> importProvinciaFromCSV(@RequestParam("csv")MultipartFile csvFile){
+
+        List<ProvinciaDTO> res = new ArrayList<>();
+
+        List<String[]> csv = CSV.toStringList(csvFile);
+        for (String[] row : csv){
+            res.add(new ProvinciaDTO(row[1], row[0]));
+        }
+
+        return this.provinciaServ.saveProvinciaList(res);
+    }
+
 
     @GetMapping
     public Page<Provincia> findAllProvince(@RequestParam(defaultValue = "0") int page,
