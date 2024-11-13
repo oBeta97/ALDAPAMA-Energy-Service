@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -19,7 +20,7 @@ public class Fattura {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    private Date data;
+    private LocalDate data;
     @Column(nullable = false)
     private Long importo;
     @Column(name = "num_fatt", nullable = false)
@@ -47,7 +48,7 @@ public class Fattura {
         this.cliente = clienteFattura;
     }
 
-    public Fattura(Date data, Long importo, String numFatt, StatoFattura stato, Utente utente, Cliente cliente) {
+    public Fattura(LocalDate data, Long importo, String numFatt, StatoFattura stato, Utente utente, Cliente cliente) {
         this.data = data;
         this.importo = importo;
         this.numFatt = numFatt;
@@ -55,4 +56,6 @@ public class Fattura {
         this.utente = utente;
         this.cliente = cliente;
     }
+
+    //num fattura deve avere num seriale/anno
 }
