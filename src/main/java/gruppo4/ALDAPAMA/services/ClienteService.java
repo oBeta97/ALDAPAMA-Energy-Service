@@ -32,24 +32,38 @@ public class ClienteService {
         if (clienteRepository.existsByPartitaIva(clienteDTO.partitaIva())) {
             throw new BadRequestException("Partita IVA già esistente");
         }
+        if (clienteRepository.existsByPec(clienteDTO.pec())) {
+            throw new BadRequestException("PEC già esistente");
+        }
 
         Cliente cliente = new Cliente(
-            clienteDTO.ragioneSociale(),
-            clienteDTO.partitaIva(),
-            clienteDTO.pec(),
-            clienteDTO.telefono(),
-            clienteDTO.logoAziendale()
+                clienteDTO.ragioneSociale(),
+                clienteDTO.partitaIva(),
+                clienteDTO.pec(),
+                clienteDTO.telefono(),
+                clienteDTO.logoAziendale()
         );
 
         return clienteRepository.save(cliente);
     }
 
     public Cliente update(Long id, ClienteDTO clienteDTO) {
-        Cliente esistente = getById(id);
-        Cliente clienteAggiornato = new Cliente(esistente.getId(), clienteDTO.ragioneSociale(), 
-            clienteDTO.pec(), clienteDTO.telefono(), clienteDTO.dataUltimoContatto(), 
-            clienteDTO.logoAziendale(), esistente.getDataInserimento());
-        return clienteRepository.save(clienteAggiornato);
+        Cliente clienteToUp = getById(id);
+
+        if (clienteRepository.existsByPartitaIva(clienteDTO.partitaIva())) {
+            throw new BadRequestException("Partita IVA già esistente");
+        }
+        if (clienteRepository.existsByPec(clienteDTO.pec())) {
+            throw new BadRequestException("PEC già esistente");
+        }
+
+        clienteToUp.setRagioneSociale(clienteDTO.ragioneSociale());
+        clienteToUp.setPartitaIva(clienteDTO.partitaIva());
+        clienteToUp.setPec(clienteDTO.pec());
+        clienteToUp.setTelefono(clienteDTO.telefono());
+        clienteToUp.setLogoAziendale(clienteDTO.logoAziendale());
+
+        return this.clienteRepository.save(clienteToUp);
     }
 
     public void delete(Long id) {

@@ -9,9 +9,11 @@ import java.util.Date;
 @Table(name = "clienti")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
     private Long id;
     
     @Column(name = "ragione_sociale")
@@ -38,16 +40,16 @@ public class Cliente {
         this.dataInserimento = new Date();
     }
 
-    // Constructor for updating existing cliente
-    public Cliente(Long id, String ragioneSociale, String pec, 
-                  String telefono, Date dataUltimoContatto, 
-                  String logoAziendale, Date dataInserimento) {
-        this.id = id;
-        this.ragioneSociale = ragioneSociale;
-        this.pec = pec;
-        this.telefono = telefono;
-        this.dataUltimoContatto = dataUltimoContatto;
-        this.logoAziendale = logoAziendale;
-        this.dataInserimento = dataInserimento;
-    }
+//    // Constructor for updating existing cliente
+//    public Cliente(Long id, String ragioneSociale, String pec,
+//                  String telefono, Date dataUltimoContatto,
+//                  String logoAziendale, Date dataInserimento) {
+//        this.id = id;
+//        this.ragioneSociale = ragioneSociale;
+//        this.pec = pec;
+//        this.telefono = telefono;
+//        this.dataUltimoContatto = dataUltimoContatto;
+//        this.logoAziendale = logoAziendale;
+//        this.dataInserimento = dataInserimento;
+//    }
 }
