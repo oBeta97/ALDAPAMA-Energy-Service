@@ -1,6 +1,8 @@
 package gruppo4.ALDAPAMA.services;
 
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import gruppo4.ALDAPAMA.dto.NewUtenteDTO;
 import gruppo4.ALDAPAMA.entities.Utente;
 import gruppo4.ALDAPAMA.enums.Ruolo;
@@ -13,11 +15,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 import java.util.Optional;
 
 @Service
 public class UtentiService {
+
+    @Autowired
+    private Cloudinary cloudinaryUploader;
 
     @Autowired
     private UtentiRepository utentiRepo;
@@ -85,4 +93,20 @@ public class UtentiService {
         );
     }
 
+    public Utente uploadAvatar(long employeeId, MultipartFile file) {
+
+        String url = null;
+        try {
+            url = (String) cloudinaryUploader.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
+        } catch (IOException e) {
+            throw new BadRequestException("Ci sono stati problemi con l'upload del file!");
+        }
+
+        Utente found = this.getById(employeeId);
+        found.setAvatar(url);
+
+        return this.utentiRepo.save(found);
+
+
+    }
 }

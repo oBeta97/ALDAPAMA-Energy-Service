@@ -1,5 +1,7 @@
 package gruppo4.ALDAPAMA.services;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import gruppo4.ALDAPAMA.dto.ClienteDTO;
 import gruppo4.ALDAPAMA.entities.Cliente;
 import gruppo4.ALDAPAMA.exceptions.BadRequestException;
@@ -11,12 +13,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Service
 public class ClienteService {
 
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private Cloudinary cloudinaryUploader;
 
     public Page<Cliente> getAll(int page, int size, String sortBy) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -69,5 +77,21 @@ public class ClienteService {
     public void delete(Long id) {
         Cliente cliente = getById(id);
         clienteRepository.delete(cliente);
+    }
+
+    public Cliente uploadLogoAziendale(long id, MultipartFile file) {
+
+        String url = null;
+        try {
+            url = (String) cloudinaryUploader.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
+        } catch (IOException e) {
+            throw new BadRequestException("Ci sono stati problemi con l'upload del file!");
+        }
+
+        Cliente found = this.getById(id);
+        found.setLogoAziendale(url);
+
+        return this.clienteRepository.save(found);
+
     }
 }

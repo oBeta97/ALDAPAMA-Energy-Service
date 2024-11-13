@@ -1,5 +1,6 @@
 package gruppo4.ALDAPAMA.config;
 
+import com.cloudinary.Cloudinary;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
@@ -8,7 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Configuration
 public class OpenAPIConfig {
@@ -37,5 +40,18 @@ public class OpenAPIConfig {
                         "\n");
 
         return new OpenAPI().info(info).servers(List.of(devServer));
+    }
+
+    @Bean
+    public Cloudinary getImageUploader(
+            @Value("${cloudinary.name}") String cloudName,
+            @Value("${cloudinary.key}") String apiKey,
+            @Value("${cloudinary.secret}") String apiSecret
+    ) {
+        Map<String, String> config = new HashMap<>();
+        config.put("cloud_name", cloudName);
+        config.put("api_key", apiKey);
+        config.put("api_secret", apiSecret);
+        return new Cloudinary(config);
     }
 }
