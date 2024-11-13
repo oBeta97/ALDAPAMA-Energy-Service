@@ -1,6 +1,8 @@
 package gruppo4.ALDAPAMA.services;
 
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import gruppo4.ALDAPAMA.dto.NewUtenteDTO;
 import gruppo4.ALDAPAMA.entities.Utente;
 import gruppo4.ALDAPAMA.exceptions.BadRequestException;
@@ -12,25 +14,31 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Service
 public class UtentiService {
 
     @Autowired
+    private Cloudinary cloudinaryUploader;
+
+    @Autowired
     private UtentiRepository utentiRepo;
 
-    public Page<Utente> getAll(int page, int size, String sortBy){
+    public Page<Utente> getAll(int page, int size, String sortBy) {
         if (size > 25) size = 25;
 
-        Pageable pageable = PageRequest.of(page,size, Sort.by(sortBy));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
         return this.utentiRepo.findAll(pageable);
     }
 
-    public Utente getById (long userId){
+    public Utente getById(long userId) {
         return this.utentiRepo.findById(userId).orElseThrow(() -> new NotFoundException("Utente con id " + userId + " non trovato!"));
     }
 
-    public Utente saveNewUtente (NewUtenteDTO newUtenteDTO){
+    public Utente saveNewUtente(NewUtenteDTO newUtenteDTO) {
         this.utentiRepo.
                 findByUsername(newUtenteDTO.username()).
                 ifPresent(utente -> {
@@ -50,7 +58,7 @@ public class UtentiService {
         return this.utentiRepo.save(nuovoUtente);
     }
 
-    public Utente updateUser(long idToUpdate, NewUtenteDTO newUtenteDTO){
+    public Utente updateUser(long idToUpdate, NewUtenteDTO newUtenteDTO) {
         Utente found = this.getById(idToUpdate);
 
         found.setEmail(newUtenteDTO.email());
@@ -61,10 +69,26 @@ public class UtentiService {
         return this.utentiRepo.save(found);
     }
 
-    public void deleteUtente (long idToDelete){
+    public void deleteUtente(long idToDelete) {
         this.utentiRepo.delete(
                 this.getById(idToDelete)
         );
     }
 
+    public Utente uploadAvatar(long employeeId, MultipartFile file) {
+
+        String url = null;
+        try {
+            url = (String) cloudinaryUploader.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
+        } catch (IOException e) {
+            throw new BadRequestException("Ci sono stati problemi con l'upload del file!");
+        }
+
+        Utente found = this.getById(employeeId);
+        found.setAvatar(url);
+
+        return this.utentiRepo.save(found);
+
+
+    }
 }
