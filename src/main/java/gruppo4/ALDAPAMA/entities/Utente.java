@@ -39,7 +39,7 @@ public class Utente {
         this.ruolo = ruolo;
     }
 
-    public Utente (NewUtenteDTO newUtenteDTO){
+    public Utente(NewUtenteDTO newUtenteDTO) {
         this.username = newUtenteDTO.username();
         this.email = newUtenteDTO.email();
         this.password = newUtenteDTO.password();
@@ -49,10 +49,8 @@ public class Utente {
         this.ruolo = Ruolo.USER;
     }
 
-
-    private void setDefaultAvatar(){
+    private void setDefaultAvatar() {
         this.avatar = "https://ui-avatars.com/api/?name=" + getNome() + "+" + getCognome();
     }
-
 
 }

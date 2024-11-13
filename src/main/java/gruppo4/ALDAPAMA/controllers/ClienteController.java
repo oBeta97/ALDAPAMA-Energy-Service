@@ -1,16 +1,17 @@
 package gruppo4.ALDAPAMA.controllers;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import gruppo4.ALDAPAMA.dto.ClienteDTO;
 import gruppo4.ALDAPAMA.entities.Cliente;
 import gruppo4.ALDAPAMA.services.ClienteService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
    /*
     http://localhost:3002/clienti
@@ -25,11 +26,11 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @Operation(
-        summary = "Retrieve all clients",
-        description = "Get a paginated list of all clients with sorting capabilities",
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Successful retrieval of clients")
-        })
+            summary = "Retrieve all clients",
+            description = "Get a paginated list of all clients with sorting capabilities",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful retrieval of clients")
+            })
     @GetMapping
     public Page<Cliente> getAllClienti(
             @RequestParam(defaultValue = "0") int page,
@@ -59,5 +60,10 @@ public class ClienteController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCliente(@PathVariable Long id) {
         clienteService.delete(id);
+    }
+
+    @PatchMapping("/{id}/logo-aziendale")
+    public Cliente uploadLogoAziendale(@PathVariable long id, @RequestParam("logo-aziendale") MultipartFile file) {
+        return this.clienteService.uploadLogoAziendale(id, file);
     }
 }
