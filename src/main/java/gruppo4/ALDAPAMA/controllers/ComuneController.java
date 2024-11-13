@@ -57,46 +57,43 @@ public class ComuneController {
 
             String provinciaString = row[3];
 
-            System.out.println(provinciaString);
-
             Provincia provincia = new Provincia();
             try{
                 provincia = this.provinciaServ.findProvinciaByNome(provinciaString);
-                System.out.println(provincia);
             } catch (NotFoundException e){
                 switch (provinciaString){
                     case "Verbano-Cusio-Ossola":
-                        this.correggiProvincia("Verbania","Verbano-Cusio-Ossola", "VB");
+                        provincia = this.correggiProvincia("Verbania","Verbano-Cusio-Ossola", "VB");
                         break;
                     case "Valle d'Aosta/Vallée d'Aoste":
-                        this.correggiProvincia("Aosta", "Valle d'Aosta/Vallée d'Aoste","AO");
+                        provincia = this.correggiProvincia("Aosta", "Valle d'Aosta/Vallée d'Aoste","AO");
                         break;
                     case "Monza e della Brianza":
-                        this.correggiProvincia("Monza-Brianza", "Monza e della Brianza", "MB");
+                        provincia = this.correggiProvincia("Monza-Brianza", "Monza e della Brianza", "MB");
                         break;
                     case "Bolzano/Bozen":
-                        this.correggiProvincia("Bolzano","Bolzano/Bozen","BZ");
+                        provincia = this.correggiProvincia("Bolzano","Bolzano/Bozen","BZ");
                         break;
                     case "La Spezia":
-                        this.correggiProvincia("La-Spezia","La Spezia","SP");
+                        provincia = this.correggiProvincia("La-Spezia","La Spezia","SP");
                         break;
                     case "Reggio nell'Emilia":
-                        this.correggiProvincia("Reggio-Emilia", "Reggio nell'Emilia","RE");
+                        provincia = this.correggiProvincia("Reggio-Emilia", "Reggio nell'Emilia","RE");
                         break;
                     case "Forlì-Cesena":
-                        this.correggiProvincia("Forli-Cesena","Forlì-Cesena", "FC");
+                        provincia = this.correggiProvincia("Forli-Cesena","Forlì-Cesena", "FC");
                         break;
                     case "Pesaro e Urbino":
-                        this.correggiProvincia("Pesaro-Urbino","Pesaro e Urbino", "PU");
+                        provincia = this.correggiProvincia("Pesaro-Urbino","Pesaro e Urbino", "PU");
                         break;
                     case "Ascoli Piceno":
-                        this.correggiProvincia("Ascoli-Piceno","Ascoli Piceno","AP");
+                        provincia = this.correggiProvincia("Ascoli-Piceno","Ascoli Piceno","AP");
                         break;
                     case "Reggio Calabria":
-                        this.correggiProvincia("Reggio-Calabria","Reggio Calabria","RC");
+                        provincia = this.correggiProvincia("Reggio-Calabria","Reggio Calabria","RC");
                         break;
                     case "Vibo Valentia":
-                        this.correggiProvincia("Vibo-Valentia","Vibo Valentia","VV");
+                        provincia = this.correggiProvincia("Vibo-Valentia","Vibo Valentia","VV");
                         break;
                     case "Sud Sardegna":
                         this.provinciaServ.saveProvincia(new ProvinciaDTO("Sud Sardegna", "SU"));
@@ -113,10 +110,10 @@ public class ComuneController {
 
     }
 
-    private void correggiProvincia (String nomeSbagliato, String nomeCorretto, String siglaCorretta){
+    private Provincia correggiProvincia (String nomeSbagliato, String nomeCorretto, String siglaCorretta){
         Provincia p = this.provinciaServ.findProvinciaByNome(nomeSbagliato);
         ProvinciaDTO provinciaCorretta = new ProvinciaDTO(nomeCorretto, siglaCorretta);
-        this.provinciaServ.findProvinciaByIdAndUp(p.getId(), provinciaCorretta);
+        return this.provinciaServ.findProvinciaByIdAndUp(p.getId(), provinciaCorretta);
     }
 
     @GetMapping
