@@ -10,16 +10,14 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-   /*
-    http://localhost:3002/clienti
-    */
 
 @Tag(name = "Cliente", description = "Cliente management APIs")
 @RestController
 @RequestMapping("/clienti")
+@PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
 public class ClienteController {
 
     @Autowired
