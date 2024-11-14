@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ClienteService {
 
@@ -34,11 +36,11 @@ public class ClienteService {
         }
 
         Cliente cliente = new Cliente(
-            clienteDTO.ragioneSociale(),
-            clienteDTO.partitaIva(),
-            clienteDTO.pec(),
-            clienteDTO.telefono(),
-            clienteDTO.logoAziendale()
+                clienteDTO.ragioneSociale(),
+                clienteDTO.partitaIva(),
+                clienteDTO.pec(),
+                clienteDTO.telefono(),
+                clienteDTO.logoAziendale()
         );
 
         return clienteRepository.save(cliente);
@@ -46,14 +48,30 @@ public class ClienteService {
 
     public Cliente update(Long id, ClienteDTO clienteDTO) {
         Cliente esistente = getById(id);
-        Cliente clienteAggiornato = new Cliente(esistente.getId(), clienteDTO.ragioneSociale(), 
-            clienteDTO.pec(), clienteDTO.telefono(), clienteDTO.dataUltimoContatto(), 
-            clienteDTO.logoAziendale(), esistente.getDataInserimento());
+        Cliente clienteAggiornato = new Cliente(esistente.getId(), clienteDTO.ragioneSociale(),
+                clienteDTO.pec(), clienteDTO.telefono(), clienteDTO.dataUltimoContatto(),
+                clienteDTO.logoAziendale(), esistente.getDataInserimento());
         return clienteRepository.save(clienteAggiornato);
     }
 
     public void delete(Long id) {
         Cliente cliente = getById(id);
         clienteRepository.delete(cliente);
+    }
+
+    public List<Cliente> getClientiOrdinatiPerNomeContatto() {
+        return clienteRepository.findAllOrderByContattoNome();
+    }
+
+    public List<Cliente> getClientiOrdinatiPerFatturatoAnnuale(int anno) {
+        return clienteRepository.findAllOrderByFatturatoAnnuale(anno);
+    }
+
+    public List<Cliente> getClientiOrdinatiPerDataInserimento() {
+        return clienteRepository.findAllOrderByDataInserimento();
+    }
+
+    public List<Cliente> getClientiOrdinatiPerDataUltimoContatto() {
+        return clienteRepository.findAllOrderByDataUltimoContatto();
     }
 }
