@@ -30,6 +30,11 @@ public class UtentiService {
     @Autowired
     private UtentiRepository utentiRepo;
 
+    public Utente findByUsername(String username) {
+        return utentiRepo.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+    }
+
     public Page<Utente> getAll(int page, int size, String sortBy) {
         if (size > 25) size = 25;
 
