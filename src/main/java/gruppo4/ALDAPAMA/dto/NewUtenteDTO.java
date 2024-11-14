@@ -14,4 +14,5 @@ public record NewUtenteDTO(
         String nome,
         String cognome,
         String ruolo
-) {}
+) {
+}
