@@ -1,16 +1,21 @@
 package gruppo4.ALDAPAMA.services;
 
 import gruppo4.ALDAPAMA.dto.ComuneDTO;
+import gruppo4.ALDAPAMA.dto.ProvinciaDTO;
 import gruppo4.ALDAPAMA.entities.Comune;
 import gruppo4.ALDAPAMA.entities.Provincia;
 import gruppo4.ALDAPAMA.exceptions.BadRequestException;
 import gruppo4.ALDAPAMA.exceptions.NotFoundException;
 import gruppo4.ALDAPAMA.repositories.ComuneRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -29,6 +34,19 @@ public class ComuneServ {
         Comune newComune = new Comune(body.nome(), provFound);
         return this.comuneRepo.save(newComune);
     }
+
+    @Transactional
+    public List<Comune> saveComuneList(List<ComuneDTO> comuneDTOList){
+
+        List<Comune> res = new ArrayList<>();
+
+        for (ComuneDTO comuneDTO : comuneDTOList){
+            res.add(this.saveComune(comuneDTO));
+        }
+
+        return res;
+    }
+
 
     public Page<Comune> findAllComuni(int page, int size) {
         if (size > 30) size = 30;

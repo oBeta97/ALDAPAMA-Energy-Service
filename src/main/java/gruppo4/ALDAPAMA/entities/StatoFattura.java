@@ -16,4 +16,7 @@ public class StatoFattura {
     private Long id;
     private String descrizione;
 
+    public StatoFattura(String descrizione) {
+        this.descrizione = descrizione;
+    }
 }
